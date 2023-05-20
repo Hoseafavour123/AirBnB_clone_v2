@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
+from models import storage
 from models.city import City
 from models.base_model import BaseModel
 from models.base_model import Base
@@ -26,7 +27,7 @@ class State(BaseModel, Base):
             """
             city_list = []
 
-            for city in list(models.storage.all(City).values()):
+            for city in list(storage.all(City).values()):
                 if city.state_id == self.id:
                     city_list.append(city)
             return city_list

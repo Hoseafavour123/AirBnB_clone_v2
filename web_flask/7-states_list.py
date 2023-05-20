@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+"""This modules defines methods for fetching data from dattabse and rendering
+templates"""
+from flask import Flask
+from flask import render_template
+from models import storage
+from models.state import State
+from operator import attrgetter
+
+app = Flask(__name__)
+
+
+@app.route('/states_list', strict_slashes=False)
+def states_list():
+    """retrieve states from database and render templates based on results"""
+    states = []
+    all_states = storage.all(State)
+
+    for val in all_states.values():
+        states.append(val)
+
+    states = sorted(states, key=attrgetter("name"))
+    return render_template('7-states_list.html', states=states)
+
+@app.teardown_appcontext
+def teardown(self):
+    """closes the current session after each request"""
+    storage.close()
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port='5000')
